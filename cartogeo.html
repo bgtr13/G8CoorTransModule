@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>CARTESIAN TO GEOGRAPHICAL CONVERSION</title>
+	<link rel="stylesheet" href="stylecg.css">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap" rel="stylesheet">
+</head>
+<body>
+	
+	<div class = "content">
+	
+		 <img src="logoutm.png" class="logo"> <img src="gp8.png" class="logo2">
+		
+    <br><h1>Cartesian to Geographical Conversion</h1><br>
+  <form name="cartogeo">
+
+    <b>Parameters of datum (semi major, a and flattening, f)</b><br>
+    Enter value of semi-major axis, a : <input type="float" name="txta">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Enter value of flattening, 1/f : <input type="float" name="txtf"><br><br>
+	
+	<b><br>Coordinate of a point</b><br>
+	X : <input type="float" name="txtX"> &nbsp;&nbsp; &nbsp;&nbsp;
+    Y : <input type="float" name="txtY"> &nbsp;&nbsp; &nbsp;&nbsp;
+    Z : <input type="float" name="txtZ"><br><br> 
+    
+    <button type="button" value="Convert" onClick="convertcartogeo()"><span></span>CONVERT</button><br><br>
+	  
+	  
+	  Longitude : <input type="float" name="txtLONG"> &nbsp;&nbsp;
+      Latitude : <input type="float" name="txtLAT">  &nbsp;&nbsp;
+	  Ellipsoidal height, h (m) : <input type="float" name="txth">
+       
+	  
+</form>
+
+  <script type="text/javascript">
+    function convertcartogeo() 
+      {
+       var a, f, b, e_square, X, Y, Z;
+       a = parseFloat(document.cartogeo.txta.value);
+       f = parseFloat(document.cartogeo.txtf.value);
+  	   X = parseFloat(document.cartogeo.txtX.value);
+       Y = parseFloat(document.cartogeo.txtY.value);
+       Z = parseFloat(document.cartogeo.txtZ.value);
+            
+   
+       b = a*(1-(1/f)); // Semi-minor axis
+       e_square = 1-((Math.pow(b,2))/(Math.pow(a,2))); // Eccentricity
+
+       
+		  var Longitude = (Math.atan2(Y,X))*(180/Math.PI); // Compute longitude of the point 
+		  var P = Math.sqrt(Math.pow(X, 2) + Math.pow(Y, 2)); // Physical radius of the point
+		  var lat_o = (Math.atan2(Z,P))*(180/Math.PI); // Initial latitude 
+          var N_o = a/Math.sqrt(1 - (e_square * Math.pow(Math.sin(lat_o *(Math.PI / 180)),2))); // Initial prime vertical radius of curvature
+          var h_o = (P / Math.cos(lat_o * (Math.PI / 180))) - N_o; // Initial ellipsoidal height
+		  
+		  var LAT1 = (Math.atan2(Z, (P*(1 - (e_square*(N_o/(N_o+h_o)) ))))) * (180/Math.PI); // Compute latitude of the point for 1st iteration
+          var N1 = a / (Math.sqrt(1-(e_square*(Math.pow(Math.sin(LAT1*(Math.PI/180)),2))))); // 1st iteration prime vertical radius of curvature
+          var h1 = (P / (Math.cos(LAT1 * (Math.PI / 180)))) - N1;  // 1st iteration ellipsoidal height
+       
+		  var LAT2 = (Math.atan2(Z, (P*(1 - (e_square*(N1/(N1+h1)) ))))) * (180/Math.PI); // Compute latitude of the point for 2nd iteration
+		  var N2 = a / (Math.sqrt(1-(e_square*(Math.pow(Math.sin(LAT2*(Math.PI/180)),2))))); // 2nd iteration prime vertical radius of curvature
+          var h2 = (P / (Math.cos(LAT2 * (Math.PI / 180)))) - N2;   // 2nd iteration ellipsoidal height
+		  var diffLAT = LAT2-LAT1; //convergence
+		  var Latitude = LAT2;
+		  var N = N2;
+		  var h = h2;
+		  
+		 
+	   document.cartogeo.txtLONG.value=Longitude;
+	   document.cartogeo.txtLAT.value=Latitude;
+	   document.cartogeo.txth.value=h;  
+		  
+          
+    }
+  </script>
+</body> 
+</html>
+

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>GEOGRAPHICAL TO CARTESIAN CONVERSION</title>
+	<link rel="stylesheet" href="stylegc.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap" rel="stylesheet">
+    </head>
+<body>
+<div class = "content">
+
+    <img src="logoutm.png" class="logo"> <img src="gp8.png" class="logo2">
+
+    <h1>Geographical to Cartesian Conversion</h1><br>
+  <form name="geotocar">
+
+    Enter value of semi-major axis, a :&nbsp;&nbsp;&nbsp;&nbsp;<input type="float" name="txta"><br><br>
+    Enter value of flattening, 1/f :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="float" name="txtf"><br><br>
+    Enter value of latitude :&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="float" name="txtlat"><br><br>
+    Enter value of longitude : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="float" name="txtlong"><br><br>
+    Enter value of ellipsoidal height (m) : <input type="float" name="txth"><br>
+
+
+      <button type="button" value="Convert" onClick="convertgeotocar()"><span></span>CONVERT</button><br>
+
+
+    X : <input type="float" name="txtX"> &nbsp;&nbsp;
+    Y : <input type="float" name="txtY"> &nbsp;&nbsp;
+    Z : <input type="float" name="txtZ">
+
+
+</form>
+
+  <script type="text/javascript">
+    function convertgeotocar()
+      {
+       var a, f, lat, long, h, b, e_square, RN;
+       a = parseFloat(document.geotocar.txta.value);
+       f = parseFloat(document.geotocar.txtf.value);
+       lat = parseFloat(document.geotocar.txtlat.value);
+       long = parseFloat(document.geotocar.txtlong.value);
+       h = parseFloat(document.geotocar.txth.value);
+
+// Compute semi minor, b and eccentricity, e_square
+       b = a*(1-(1/f));
+       e_square = 1-((Math.pow(b,2))/(Math.pow(a,2)));
+
+// Compute prime vertical radius of curvature, RN
+       RN = a/(Math.sqrt(1-(e_square*(Math.pow(Math.sin(lat*(Math.PI/180)),2)))));
+
+// Compute Cartesian Coordinate (X,Y,Z)
+       X = (RN + h) * Math.cos(lat * (Math.PI / 180)) * Math.cos(long * (Math.PI / 180));
+       Y = (RN + h) * Math.cos(lat * (Math.PI / 180)) * Math.sin(long * (Math.PI / 180));
+       Z = (((1 - e_square) * RN) + h) * Math.sin(lat * (Math.PI / 180));
+
+       document.geotocar.txtX.value=X;
+       document.geotocar.txtY.value=Y;
+       document.geotocar.txtZ.value=Z;
+
+
+    }
+  </script>
+    </body>
+</html>
+

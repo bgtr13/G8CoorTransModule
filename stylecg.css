@@ -1,0 +1,57 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+.content{
+    color: white;
+    text-align: center;
+    width: 100%;
+    height:100vh;
+    background-image:  linear-gradient(rgba(0,0,0,0.75),rgba(0,0,0,0.75)),url(dmitry.jpg);
+    background-position: center;
+    font-size: 25px;
+}
+
+button{
+    width: 130px;
+    padding: 10px;
+    text-align: center;
+    margin: 8px 20px;
+    border-radius: 30px;
+    font-weight: bold;
+    border: 2px solid #ffff;
+     background: transparent;
+    color: #fff;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+	font-size: 18px;
+}
+
+.content h1{
+    font-size: 45px;
+}
+
+.logo{
+	margin : 30px;
+    width: 120px;
+    position: top;
+    transform: translateY(40%);
+	transform: translateX(10%);
+}
+
+.logo2{
+    margin : 30px;
+    width: 120px;
+    position:top;
+    transform: translateY(-10%);
+	transform: translateX(20%);
+}
+
+input{
+    width: 250px;
+    padding: 5px;
+	border-radius: 25px;
+}

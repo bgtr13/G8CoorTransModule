@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DATUM TRANSFORMATION</title>
+    <link rel="stylesheet" href="datum.css">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap" rel="stylesheet">
+
+   
+</head>
+
+
+    <div class="content">
+        <img src="logoutm.png" class="logo"> <img src="gp8.png" class="logo2">
+        <h1>DATUM TRANSFORMATION</h1><br>
+        
+        <form name="index">
+            <b>Input Cartesian Coordinate of the Point</b><br>
+            X : <input type="float" name="txtX">&nbsp;&nbsp; &nbsp;&nbsp;
+            Y : <input type="float" name="txtY">&nbsp;&nbsp; &nbsp;&nbsp;
+            Z : <input type="float" name="txtZ"><br><br>
+
+            <b>Input Translation Parameters</b><br>
+            T_X : <input type="float" name="txttX">&nbsp;&nbsp; &nbsp;&nbsp;
+            T_Y: <input type="float" name="txttY">&nbsp;&nbsp; &nbsp;&nbsp;
+            T_Z: <input type="float" name="txttZ"><br>
+
+            <b><br>Input Rotation Parameters</b><br>
+            R_X : <input type="float" name="txtrX">&nbsp;&nbsp; &nbsp;&nbsp;
+            R_Y: <input type="float" name="txtrY">&nbsp;&nbsp; &nbsp;&nbsp;
+            R_Z: <input type="float" name="txtrZ"><br>
+
+            <b><br>Input Scale Correction</b><br>
+            Sc: <input type="float" name="txtSc"><br>
+
+            <button class="custom-button" type="button" value="Convert" onClick="convert()">
+                <span></span>CONVERT
+            </button><br>
+
+            X Coordinate : <input type="float" name="txt_Xcoord"> &nbsp;&nbsp;
+            Y Coordinate : <input type="float" name="txt_Ycoord"> &nbsp;&nbsp;
+            Z Coordinate : <input type="float" name="txt_Zcoord">
+
+        </form>
+
+        <script>
+            function convert() {
+              var X, Y, Z, T_X, T_Y, T_Z, R_X, R_Y, R_Z, Sc;
+              X = parseFloat(document.index.txtX.value);
+              Y = parseFloat(document.index.txtY.value);
+              Z = parseFloat(document.index.txtZ.value);
+              T_X = parseFloat(document.index.txttX.value);
+              T_Y = parseFloat(document.index.txttY.value);
+              T_Z = parseFloat(document.index.txttZ.value);
+              R_X = parseFloat(document.index.txtrX.value);
+              R_Y = parseFloat(document.index.txtrY.value);
+              R_Z = parseFloat(document.index.txtrZ.value);
+              Sc = parseFloat(document.index.txtSc.value);
+          
+              var r_X = (R_X / 3600) * Math.PI / 180;
+              var r_Y = (R_Y / 3600) * Math.PI / 180;
+              var r_Z = (R_Z / 3600) * Math.PI / 180;
+          
+              var ds = Sc / 1000000;
+          
+              var A = [
+                [1 + ds, r_Z, -r_Y],
+                [-r_Z, 1 + ds, r_X],
+                [r_Y, -r_X, 1 + ds]
+              ];
+          
+              var B = [
+                [X],
+                [Y],
+                [Z]
+              ];
+          
+              var C = [
+                [T_X],
+                [T_Y],
+                [T_Z]
+              ];
+          
+              // Perform the calculation
+              var result = multiplyMatrix(A, B);
+              result = addMatrix(result, C);
+          
+              // Display the result in the X, Y, and Z coordinate fields
+              document.index.txt_Xcoord.value = result[0][0].toFixed(6);
+              document.index.txt_Ycoord.value = result[1][0].toFixed(6);
+              document.index.txt_Zcoord.value = result[2][0].toFixed(6);
+            }
+          
+            // Function to multiply two matrices
+            function multiplyMatrix(A, B) {
+              var rowsA = A.length;
+              var colsA = A[0].length;
+              var colsB = B[0].length;
+          
+              var result = new Array(rowsA);
+              for (var i = 0; i < rowsA; i++) {
+                result[i] = new Array(colsB);
+                for (var j = 0; j < colsB; j++) {
+                  result[i][j] = 0;
+                  for (var k = 0; k < colsA; k++) {
+                    result[i][j] += A[i][k] * B[k][j];
+                  }
+                }
+              }
+              return result;
+            }
+          
+            // Function to add two matrices
+            function addMatrix(A, B) {
+              var rows = A.length;
+              var cols = A[0].length;
+          
+              var result = new Array(rows);
+              for (var i = 0; i < rows; i++) {
+                result[i] = new Array(cols);
+                for (var j = 0; j < cols; j++) {
+                  result[i][j] = A[i][j] + B[i][j];
+                }
+              }
+              return result;
+            }
+          </script>
+          
+    </div>
+</body>
+
+</html>
